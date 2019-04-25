@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java456.dao.LunBoDao">
+	
+	<resultMap type="LunBo" id="LunBoResult">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="url" column="url"/>
+		<result property="image_url" column="image_url"/>
+		<result property="isUse" column="isUse"/>
+		<result property="type" column="type"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="createUserId" column="createUserId"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="updateDateTime" column="updateDateTime"/>
+		
+		<association property="createUser" column="createUserId"
+			select="com.java456.dao.UserDao.findById"></association>
+	</resultMap>
+	
+	<insert id="add" parameterType="LunBo"  useGeneratedKeys="true" keyProperty="id">
+		insert into t_lun_bo values(null,#{title},#{url},#{image_url},#{isUse},#{type},#{orderNo}
+		,#{createUserId},#{createDateTime},#{updateDateTime});
+	</insert>
+	
+	<update id="update" parameterType="LunBo">
+		update t_lun_bo
+		<set>
+			<if test="title!=null ">
+				title=#{title},
+			</if>
+			<if test="url!=null  ">
+				url=#{url},
+			</if>
+			<if test="image_url!=null">
+				image_url=#{image_url},
+			</if>
+			<if test="isUse!=null">
+				isUse=#{isUse},
+			</if>
+			<if test="type!=null">
+				type=#{type},
+			</if>
+			<if test="orderNo!=null">
+				orderNo=#{orderNo},
+			</if>
+			<if test="updateDateTime!=null">
+				updateDateTime=#{updateDateTime},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	
+	<select id="list" parameterType="Map" resultMap="LunBoResult">
+		select * from t_lun_bo 
+		<where>
+			<if test="isUse!=null and isUse!='' ">
+		 		and  isUse =  #{isUse} 
+			</if>
+		</where>
+		order by orderNo
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="index_list"  resultMap="LunBoResult">
+		select * from t_lun_bo where isUse = 1
+		group by orderNo
+		order by orderNo
+	</select>
+	
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+		select count(*) from t_lun_bo
+		<where>
+			<if test="isUse!=null and isUse!='' ">
+		 		and isUse =  #{isUse} 
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from t_lun_bo where id=#{id}
+	</delete>
+	
+	<select id="findById" parameterType="Integer" resultMap="LunBoResult">
+		select * from t_lun_bo where id=#{id}
+	</select>
+	
+	
+</mapper> 

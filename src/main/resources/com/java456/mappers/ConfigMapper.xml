@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java456.dao.ConfigDao">
+	
+	<resultMap type="Config" id="ConfigResult">
+		<result property="id" column="id" />
+		<result property="web_name" column="web_name" />
+		<result property="station_name" column="station_name" />
+		<result property="web_site" column="web_site" />
+		<result property="headStr" column="headStr" />
+		<result property="layuiStr" column="layuiStr" />
+		<result property="tongjiStr" column="tongjiStr" />
+		<result property="houtai_logo" column="houtai_logo" />
+		<result property="gzh" column="gzh" />
+		<result property="geren_erweima" column="geren_erweima" />
+		<result property="logo" column="logo" />
+		<result property="index_page_title" column="index_page_title" />
+		<result property="index_page_keywords" column="index_page_keywords" />
+		<result property="index_page_description" column="index_page_description" />
+		<result property="beian_" column="beian_" />
+		<result property="banben" column="banben" />
+		<result property="food_info" column="food_info" />
+		<result property="nav_str" column="nav_str" />
+	</resultMap>
+	
+	
+	<update id="update" parameterType="Config">
+		update t_config
+		<set>
+			<if test="web_name!=null    ">
+				web_name=#{web_name},
+			</if>
+			<if test="station_name!=null    ">
+				station_name=#{station_name},
+			</if>
+			<if test="web_site!=null    ">
+				web_site=#{web_site},
+			</if>
+			<if test="headStr!=null ">
+				headStr=#{headStr},
+			</if>
+			<if test="layuiStr!=null ">
+				layuiStr=#{layuiStr},
+			</if>
+			<if test="tongjiStr!=null ">
+				tongjiStr=#{tongjiStr},
+			</if>
+			<if test="houtai_logo!=null ">
+				houtai_logo=#{houtai_logo},
+			</if>
+			<if test="gzh!=null  ">
+				gzh=#{gzh},
+			</if>
+			<if test="geren_erweima!=null    ">
+				geren_erweima=#{geren_erweima},
+			</if>
+			<if test="logo!=null    ">
+				logo=#{logo},
+			</if>
+			<if test="index_page_title!=null    ">
+				index_page_title=#{index_page_title},
+			</if>
+			<if test="index_page_keywords!=null    ">
+				index_page_keywords=#{index_page_keywords},
+			</if>
+			<if test="index_page_description!=null ">
+				index_page_description=#{index_page_description},
+			</if>
+			<if test="beian_!=null ">
+				beian_=#{beian_},
+			</if>
+			<if test="banben!=null ">
+				banben=#{banben},
+			</if>
+			<if test="food_info!=null ">
+				food_info=#{food_info},
+			</if>
+			<if test="nav_str!=null ">
+				nav_str=#{nav_str},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<select id="findById" parameterType="Integer" resultMap="ConfigResult">
+		select * from t_config where id=#{id}
+	</select>
+	
+</mapper> 

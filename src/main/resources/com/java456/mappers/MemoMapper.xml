@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java456.dao.MemoDao">
+	
+	<resultMap type="Memo" id="MemoResult">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="memoFenLeiId" column="memoFenLeiId"/>
+		<result property="orderNo" column="orderNo"/>
+		<result property="createUserId" column="createUserId"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="updateDateTime" column="updateDateTime"/>
+		
+		<association property="memoFenLei" column="memoFenLeiId"
+			select="com.java456.dao.MemoFenLeiDao.findById"></association>
+		<association property="createUser" column="createUserId"
+			select="com.java456.dao.UserDao.findById"></association>
+	</resultMap>
+	
+	<insert id="add" parameterType="Memo">
+		insert into t_memo values(null,#{title},#{content},#{memoFenLeiId},#{orderNo},#{createUserId},#{createDateTime},#{updateDateTime});
+	</insert>
+	
+	<update id="update" parameterType="Memo">
+		update t_memo
+		<set>
+			<if test="title!=null ">
+				title=#{title},
+			</if>
+			<if test="content!=null  ">
+				content=#{content},
+			</if>
+			<if test="memoFenLeiId!=null  ">
+				memoFenLeiId=#{memoFenLeiId},
+			</if>
+			<if test="orderNo!=null">
+				orderNo=#{orderNo},
+			</if>
+			<if test="createUserId!=null">
+				createUserId=#{createUserId},
+			</if>
+			<if test="updateDateTime!=null">
+				updateDateTime=#{updateDateTime},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<select id="list" parameterType="Map" resultMap="MemoResult">
+		select * from t_memo
+		<where>
+			<if test="q!=null and q!=''">
+				and (title like #{q}  or content like #{q}) 
+			</if>
+			<if test="memoFenLeiId!=null and memoFenLeiId!='' ">
+		 		and memoFenLeiId =  #{memoFenLeiId} 
+			</if>
+		</where>
+		order by orderNo
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+		select count(*) from t_memo
+		<where>
+			<if test="q!=null and q!=''">
+				and (title like #{q}  or content like #{q}) 
+			</if>
+			<if test="memoFenLeiId!=null and memoFenLeiId!='' ">
+		 		and memoFenLeiId =  #{memoFenLeiId} 
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from t_memo where id=#{id}
+	</delete>
+	
+	
+	<select id="findById" parameterType="Integer" resultMap="MemoResult">
+		select * from t_memo where id=#{id}
+	</select>
+	
+	
+</mapper> 

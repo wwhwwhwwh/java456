@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java456.dao.BlogDao">
+	
+	<resultMap type="Blog" id="BlogResult">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="contentNoTag" column="contentNoTag"/>
+		<result property="summary" column="summary"/>
+		
+		<result property="thumbnail_image" column="thumbnail_image"/>
+		<result property="keywords" column="keywords"/>
+		<result property="description_" column="description_"/>
+		<result property="clickHit" column="clickHit"/>
+		<result property="replyHit" column="replyHit"/>
+		
+		<result property="display_mode" column="display_mode"/>
+		<result property="url" column="url"/>
+		
+		<result property="createUserId" column="createUserId"/>
+		<result property="blogFenLeiId" column="blogFenLeiId"/>
+		<result property="isUse" column="isUse"/>
+		<result property="createDateTime" column="createDateTime"/>
+		<result property="updateDateTime" column="updateDateTime"/>
+		<association property="blogFenLei" column="blogFenLeiId"
+			select="com.java456.dao.BlogFenLeiDao.findById"></association>
+		<association property="createUser" column="createUserId"
+			select="com.java456.dao.UserDao.findById"></association>
+	</resultMap>
+	
+	<resultMap type="Blog" id="BlogResult2">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="createDateTime" column="createDateTime"/>
+	</resultMap>
+	
+	<insert id="add" parameterType="Blog"  useGeneratedKeys="true" keyProperty="id">
+		insert into t_blog values(null,#{title},#{content},#{contentNoTag},#{summary},#{thumbnail_image},#{keywords}
+		,#{description_},#{clickHit},#{replyHit},#{display_mode},#{url},#{createUserId},#{blogFenLeiId},#{isUse},#{createDateTime},#{updateDateTime});
+	</insert>
+	
+	<update id="update" parameterType="Blog">
+		update t_blog
+		<set>
+			<if test="title!=null ">
+				title=#{title},
+			</if>
+			<if test="content!=null  ">
+				content=#{content},
+			</if>
+			<if test="contentNoTag!=null">
+				contentNoTag=#{contentNoTag},
+			</if>
+			<if test="summary!=null">
+				summary=#{summary},
+			</if>
+			<if test="thumbnail_image!=null ">
+				thumbnail_image=#{thumbnail_image},
+			</if>
+			<if test="keywords!=null  ">
+				keywords=#{keywords},
+			</if>
+			<if test="description_!=null">
+				description_=#{description_},
+			</if>
+			<if test="clickHit!=null">
+				clickHit=#{clickHit},
+			</if>
+			<if test="replyHit!=null">
+				replyHit=#{replyHit},
+			</if>
+			<if test="display_mode!=null">
+				display_mode=#{display_mode},
+			</if>
+			
+			<if test="url!=null">
+				url=#{url},
+			</if>
+			
+			<if test="blogFenLeiId!=null">
+				blogFenLeiId=#{blogFenLeiId},
+			</if>
+			<if test="isUse!=null">
+				isUse=#{isUse},
+			</if>
+			<if test="updateDateTime!=null">
+				updateDateTime=#{updateDateTime},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+	<select id="list" parameterType="Map" resultMap="BlogResult">
+		select * from t_blog 
+		<where>
+			<if test="q!=null and q!=''">
+				and (title like #{q}  or contentNoTag like #{q}  or keywords like #{q} or description_ like #{q} ) 
+			</if>
+			<if test="blogFenLeiId!=null and blogFenLeiId!='' ">
+		 		and  blogFenLeiId =  #{blogFenLeiId} 
+			</if>
+			<if test="isUse!=null and isUse!='' ">
+		 		and  isUse =  #{isUse} 
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	
+	<select id="list2" parameterType="Map" resultMap="BlogResult2">
+		select id,title,createDateTime  from t_blog 
+		<where>
+			<if test="q!=null and q!=''">
+				and (title like #{q}  or contentNoTag like #{q}  or keywords like #{q} or description_ like #{q} ) 
+			</if>
+			<if test="blogFenLeiId!=null and blogFenLeiId!='' ">
+		 		and  blogFenLeiId =  #{blogFenLeiId} 
+			</if>
+			<if test="isUse!=null and isUse!='' ">
+		 		and  isUse =  #{isUse} 
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+		select count(*) from t_blog
+		<where>
+			<if test="q!=null and q!=''">
+				and (title like #{q}  or contentNoTag like #{q}  or keywords like #{q} or description_ like #{q}) 
+			</if>
+			<if test="blogFenLeiId!=null and blogFenLeiId!='' ">
+		 		and blogFenLeiId =  #{blogFenLeiId} 
+			</if>
+			<if test="isUse!=null and isUse!='' ">
+		 		and isUse =  #{isUse} 
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delete" parameterType="Integer">
+		delete from t_blog where id=#{id}
+	</delete>
+	
+	<select id="findById" parameterType="Integer" resultMap="BlogResult">
+		select * from t_blog where id=#{id}
+	</select>
+	
+	
+</mapper> 
